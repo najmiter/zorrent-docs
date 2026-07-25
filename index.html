@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Zorrent — Saturate the line. Nothing else.</title>
+    <title>Zorrent — A Free Torrent Client + YouTube Video Downloader</title>
     <meta
       name="description"
       content="Zorrent is a native, 2.6 MB torrent client for macOS and Windows (Linux planned). No accounts, no telemetry, no bloat — a hand-written, download-only protocol engine." />
@@ -19,20 +19,20 @@
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Zorrent" />
     <meta property="og:url" content="https://zorrent.knoctal.com/" />
-    <meta property="og:title" content="Zorrent — Saturate the line. Nothing else." />
+    <meta property="og:title" content="Zorrent — A Free Torrent Client + YouTube Video Downloader" />
     <meta
       property="og:description"
-      content="A native, 2.6 MB torrent client for macOS and Windows (Linux planned). No accounts, no telemetry, no bloat — a hand-written, download-only protocol engine." />
+      content="Zorrent is a native, 2.6 MB torrent client for macOS and Windows (Linux planned). No accounts, no telemetry, no bloat — a hand-written, download-only protocol engine." />
     <meta property="og:image" content="https://zorrent.knoctal.com/icons/zorrent_logo.png" />
     <meta property="og:image:width" content="680" />
     <meta property="og:image:height" content="680" />
     <meta property="og:locale" content="en_US" />
 
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Zorrent — Saturate the line. Nothing else." />
+    <meta name="twitter:title" content="Zorrent — A Free Torrent Client + YouTube Video Downloader" />
     <meta
       name="twitter:description"
-      content="A native, 2.6 MB torrent client for macOS and Windows. No accounts, no telemetry, no bloat." />
+      content="Zorrent is a native, 2.6 MB torrent client for macOS and Windows (Linux planned). No accounts, no telemetry, no bloat — a hand-written, download-only protocol engine." />
     <meta name="twitter:image" content="https://zorrent.knoctal.com/icons/zorrent_logo.png" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -47,7 +47,7 @@
         "@type": "SoftwareApplication",
         "name": "Zorrent",
         "url": "https://zorrent.knoctal.com/",
-        "description": "Zorrent is a native, 2.6 MB torrent client for macOS and Windows. No accounts, no telemetry, no bloat — a hand-written, download-only protocol engine.",
+        "description": "Zorrent is a native, 2.6 MB torrent client for macOS and Windows (Linux planned). No accounts, no telemetry, no bloat — a hand-written, download-only protocol engine.",
         "applicationCategory": "UtilitiesApplication",
         "operatingSystem": "macOS, Windows",
         "softwareVersion": "1.3.2",
@@ -74,7 +74,7 @@
         --line-2: #2b2c44;
         --fg: #e9eaf2;
         --fg-2: #9294ac;
-        --fg-3: #5c5e78;
+        --fg-3: #9c9dad;
         --accent: var(--accent-user, #615fff);
         --on-accent: #ffffff;
         --accent-soft: color-mix(in oklab, var(--accent) 16%, transparent);
@@ -260,16 +260,7 @@
           </svg>
           <span style="font-size: 14px; font-weight: 600; letter-spacing: -0.01em">Zorrent</span>
         </a>
-        <span
-          style="
-            font-family: var(--mono);
-            font-size: 11px;
-            color: var(--fg-3);
-            border: 1px solid var(--line);
-            padding: 2px 6px;
-          "
-          >v1.3.2</span
-        >
+
         <nav style="display: none; gap: 22px; margin-left: 8px; font-size: 13px; color: var(--fg-2)" data-nav="">
           <a href="#interface" style="color: var(--fg-2)" data-hover="color:var(--fg)">Interface</a>
           <a href="#engine" style="color: var(--fg-2)" data-hover="color:var(--fg)">Engine</a>
@@ -385,7 +376,9 @@
                 "
                 data-hover="background:var(--fg);color:var(--bg);box-shadow:none">
                 <span id="heroDownloadLabel">Download for macOS</span>
-                <span id="heroDownloadSize" style="font-family: var(--mono); font-size: 11px; opacity: 0.7">2.6 MB</span>
+                <span id="heroDownloadSize" style="font-family: var(--mono); font-size: 11px; opacity: 0.7"
+                  >2.6 MB</span
+                >
               </a>
               <span
                 style="
@@ -2366,9 +2359,6 @@
                   </div>
                 </a>
               </div>
-              <div style="font-family: var(--mono); font-size: 11px; color: var(--fg-3); margin-top: 14px">
-                sha256 · 9f2c41ab7e0d…c81 &nbsp;·&nbsp; released 2026-07-23
-              </div>
             </div>
           </div>
         </div>
@@ -2409,7 +2399,7 @@
                 <stop offset="1" stop-color="#EE6C1A"></stop>
               </linearGradient>
             </defs></svg
-          >ZORRENT 1.3.2</span
+          >ZORRENT</span
         >
         <span>Personal-use, source-available</span>
         <span style="flex: 1"></span>
