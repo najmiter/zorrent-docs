@@ -1,0 +1,2428 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Zorrent — Saturate the line. Nothing else.</title>
+    <meta
+      name="description"
+      content="Zorrent is a native, 2.6 MB torrent client for macOS and Windows (Linux planned). No accounts, no telemetry, no bloat — a hand-written, download-only protocol engine." />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Zorrent" />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="canonical" href="https://zorrent.knoctal.com/" />
+
+    <link rel="icon" href="/icons/zorrent_logo.svg" type="image/svg+xml" />
+    <link rel="icon" href="/icons/zorrent_logo.png" type="image/png" sizes="680x680" />
+    <link rel="apple-touch-icon" href="/icons/zorrent_logo.png" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Zorrent" />
+    <meta property="og:url" content="https://zorrent.knoctal.com/" />
+    <meta property="og:title" content="Zorrent — Saturate the line. Nothing else." />
+    <meta
+      property="og:description"
+      content="A native, 2.6 MB torrent client for macOS and Windows (Linux planned). No accounts, no telemetry, no bloat — a hand-written, download-only protocol engine." />
+    <meta property="og:image" content="https://zorrent.knoctal.com/icons/zorrent_logo.png" />
+    <meta property="og:image:width" content="680" />
+    <meta property="og:image:height" content="680" />
+    <meta property="og:locale" content="en_US" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Zorrent — Saturate the line. Nothing else." />
+    <meta
+      name="twitter:description"
+      content="A native, 2.6 MB torrent client for macOS and Windows. No accounts, no telemetry, no bloat." />
+    <meta name="twitter:image" content="https://zorrent.knoctal.com/icons/zorrent_logo.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap"
+      rel="stylesheet" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Zorrent",
+        "url": "https://zorrent.knoctal.com/",
+        "description": "Zorrent is a native, 2.6 MB torrent client for macOS and Windows. No accounts, no telemetry, no bloat — a hand-written, download-only protocol engine.",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "macOS, Windows",
+        "softwareVersion": "1.3.2",
+        "license": "https://github.com/najmiter/zorrent/blob/main/LICENSE",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "downloadUrl": [
+          "https://github.com/najmiter/zorrent-releases/releases/latest/download/Zorrent.dmg",
+          "https://github.com/najmiter/zorrent-releases/releases/latest/download/ZorrentSetup.exe"
+        ]
+      }
+    </script>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #07080f;
+        --bg-1: #0b0c15;
+        --bg-2: #101120;
+        --bg-3: #171829;
+        --line: #1c1d2e;
+        --line-2: #2b2c44;
+        --fg: #e9eaf2;
+        --fg-2: #9294ac;
+        --fg-3: #5c5e78;
+        --accent: var(--accent-user, #615fff);
+        --on-accent: #ffffff;
+        --accent-soft: color-mix(in oklab, var(--accent) 16%, transparent);
+        --accent-line: color-mix(in oklab, var(--accent) 42%, transparent);
+        --glow: 0 0 22px -8px color-mix(in oklab, var(--accent) 70%, transparent);
+        --sans: 'Instrument Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        --mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+        --canvas-opacity: 0.62;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+        -webkit-text-size-adjust: 100%;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font-family: var(--sans);
+        -webkit-font-smoothing: antialiased;
+      }
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      a:hover {
+        color: var(--fg);
+      }
+      ::selection {
+        background: var(--accent);
+        color: var(--on-accent);
+      }
+      .hx {
+        scrollbar-width: thin;
+        scrollbar-color: var(--line-2) transparent;
+      }
+      .hx::-webkit-scrollbar {
+        height: 6px;
+      }
+      .hx::-webkit-scrollbar-thumb {
+        background: var(--line-2);
+      }
+      .hx::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      @keyframes draw {
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @keyframes fade {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      @keyframes nodeon {
+        from {
+          opacity: 0.12;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      @keyframes barjag {
+        0% {
+          transform: scaleX(0);
+        }
+        9% {
+          transform: scaleX(0.07);
+        }
+        14% {
+          transform: scaleX(0.08);
+        }
+        31% {
+          transform: scaleX(0.34);
+        }
+        38% {
+          transform: scaleX(0.36);
+        }
+        55% {
+          transform: scaleX(0.52);
+        }
+        61% {
+          transform: scaleX(0.53);
+        }
+        74% {
+          transform: scaleX(0.79);
+        }
+        88% {
+          transform: scaleX(0.86);
+        }
+        100% {
+          transform: scaleX(1);
+        }
+      }
+      @keyframes blink {
+        0%,
+        55% {
+          opacity: 1;
+        }
+        56%,
+        100% {
+          opacity: 0;
+        }
+      }
+      @keyframes galbar {
+        from {
+          transform: scaleX(0.14);
+        }
+        to {
+          transform: scaleX(1);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.001ms !important;
+          animation-iteration-count: 1 !important;
+          animation-delay: 0ms !important;
+          transition-duration: 0.001ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      style="background: var(--bg); color: var(--fg); font-family: var(--sans); min-height: 100vh; overflow-x: hidden">
+      <header
+        style="
+          position: sticky;
+          top: 0;
+          z-index: 50;
+          display: flex;
+          align-items: center;
+          gap: 24px;
+          height: 54px;
+          padding: 0 20px;
+          border-bottom: 1px solid var(--line);
+          background: color-mix(in oklab, var(--bg) 88%, transparent);
+          backdrop-filter: blur(8px);
+        ">
+        <a href="#top" style="display: flex; align-items: center; gap: 9px; color: var(--fg)">
+          <svg width="20" height="20" viewBox="0 0 680 680" fill="none" aria-hidden="true">
+            <path
+              d="M500 40H180C102.68 40 40 102.68 40 180V500C40 577.32 102.68 640 180 640H500C577.32 640 640 577.32 640 500V180C640 102.68 577.32 40 500 40Z"
+              fill="#181A1F"></path>
+            <path opacity="0.55" d="M122.5 225L270 200" stroke="#615FFF" stroke-width="3"></path>
+            <path opacity="0.55" d="M560 180L410 200" stroke="#615FFF" stroke-width="3"></path>
+            <path opacity="0.55" d="M470 560L312 480" stroke="#615FFF" stroke-width="3"></path>
+            <circle cx="111" cy="226" r="23.5" fill="#615FFF"></circle>
+            <circle cx="568" cy="178" r="23.5" fill="#615FFF"></circle>
+            <circle cx="478" cy="558" r="23.5" fill="#615FFF"></circle>
+            <path
+              d="M217 94V364.6H290.8V586L463 290.8H364.6L463 94H217Z"
+              fill="url(#zg20)"
+              stroke="#C2540E"
+              stroke-width="2"></path>
+            <defs>
+              <linearGradient id="zg20" x1="217" y1="94" x2="217" y2="586" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#FFCB3D"></stop>
+                <stop offset="1" stop-color="#EE6C1A"></stop>
+              </linearGradient>
+            </defs>
+          </svg>
+          <span style="font-size: 14px; font-weight: 600; letter-spacing: -0.01em">Zorrent</span>
+        </a>
+        <span
+          style="
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--fg-3);
+            border: 1px solid var(--line);
+            padding: 2px 6px;
+          "
+          >v1.3.2</span
+        >
+        <nav style="display: none; gap: 22px; margin-left: 8px; font-size: 13px; color: var(--fg-2)" data-nav="">
+          <a href="#interface" style="color: var(--fg-2)" data-hover="color:var(--fg)">Interface</a>
+          <a href="#engine" style="color: var(--fg-2)" data-hover="color:var(--fg)">Engine</a>
+          <a href="#protocol" style="color: var(--fg-2)" data-hover="color:var(--fg)">Protocol</a>
+          <a href="#install" style="color: var(--fg-2)" data-hover="color:var(--fg)">Install</a>
+        </nav>
+        <div style="flex: 1"></div>
+
+        <a
+          id="navDownloadBtn"
+          href="#install"
+          style="
+            display: flex;
+            align-items: center;
+            height: 28px;
+            padding: 0 13px;
+            background: var(--accent);
+            color: var(--on-accent);
+            font-size: 12.5px;
+            font-weight: 600;
+            letter-spacing: -0.005em;
+          "
+          data-hover="background:var(--fg);color:var(--bg)"
+          ><span id="navDownloadLabel">Download</span></a
+        >
+      </header>
+
+      <section id="top" style="position: relative; border-bottom: 1px solid var(--line); overflow: hidden">
+        <canvas
+          id="heroCanvas"
+          aria-hidden="true"
+          style="
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            opacity: var(--canvas-opacity);
+            mask-image: radial-gradient(120% 90% at 60% 45%, #000 30%, transparent 100%);
+            -webkit-mask-image: radial-gradient(120% 90% at 60% 45%, #000 30%, transparent 100%);
+          "></canvas>
+        <div
+          style="
+            position: relative;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 56px;
+            align-items: end;
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 120px 20px 72px;
+          "
+          data-hero-grid="">
+          <div style="max-width: 720px">
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-family: var(--mono);
+                font-size: 11px;
+                letter-spacing: 0.1em;
+                color: var(--fg-3);
+                text-transform: uppercase;
+                margin-bottom: 26px;
+              ">
+              <span
+                style="
+                  width: 6px;
+                  height: 6px;
+                  background: var(--accent);
+                  animation: blink 1.6s steps(1, end) infinite;
+                "></span>
+              <span>Download-only torrent client · macOS / Windows</span>
+            </div>
+            <h1
+              style="
+                margin: 0;
+                font-size: clamp(42px, 7vw, 86px);
+                line-height: 0.94;
+                letter-spacing: -0.035em;
+                font-weight: 600;
+              ">
+              Saturate the line.<br /><span style="color: var(--fg-3)">Nothing else.</span>
+            </h1>
+            <p
+              style="
+                margin: 26px 0 0;
+                max-width: 520px;
+                font-size: 16.5px;
+                line-height: 1.55;
+                color: var(--fg-2);
+                text-wrap: pretty;
+              ">
+              Zorrent pulls files down and gets out of the way. Native binary, hand-written protocol engine, no
+              accounts, no telemetry — a 2.6&nbsp;MB download-only client.
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 36px">
+              <a
+                id="heroDownloadBtn"
+                href="https://github.com/najmiter/zorrent-releases/releases/latest/download/Zorrent.dmg"
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 10px;
+                  height: 42px;
+                  padding: 0 18px;
+                  background: var(--accent);
+                  color: var(--on-accent);
+                  font-size: 14px;
+                  font-weight: 600;
+                  box-shadow: var(--glow);
+                "
+                data-hover="background:var(--fg);color:var(--bg);box-shadow:none">
+                <span id="heroDownloadLabel">Download for macOS</span>
+                <span id="heroDownloadSize" style="font-family: var(--mono); font-size: 11px; opacity: 0.7">2.6 MB</span>
+              </a>
+              <span
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 10px;
+                  height: 42px;
+                  padding: 0 18px;
+                  border: 1px solid var(--line-2);
+                  color: var(--fg);
+                  font-size: 14px;
+                  font-weight: 500;
+                  cursor: default;
+                "
+                data-hover="border-color:var(--fg-3);background:var(--bg-2)">
+                Source
+                <span style="font-family: var(--mono); font-size: 11px; color: var(--fg-3)">Comming soon</span>
+              </span>
+            </div>
+          </div>
+
+          <div
+            style="
+              width: 100%;
+              max-width: 340px;
+              border: 1px solid var(--line);
+              background: color-mix(in oklab, var(--bg-1) 82%, transparent);
+              backdrop-filter: blur(3px);
+            ">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 9px 12px;
+                border-bottom: 1px solid var(--line);
+                font-family: var(--mono);
+                font-size: 10.5px;
+                letter-spacing: 0.08em;
+                color: var(--fg-3);
+              ">
+              <span>SESSION</span><span id="upTime" style="color: var(--fg-2)">00:00:00</span>
+            </div>
+            <div style="padding: 12px">
+              <canvas id="pieceCanvas" aria-hidden="true" style="display: block; width: 100%; height: 44px"></canvas>
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  font-family: var(--mono);
+                  font-size: 10px;
+                  color: var(--fg-3);
+                  margin-top: 6px;
+                ">
+                <span>PIECE MAP</span><span id="pieceCount">0 / 2048</span>
+              </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line)">
+              <div style="padding: 10px 12px; border-right: 1px solid var(--line)">
+                <div style="font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--fg-3)">
+                  DOWN
+                </div>
+                <div
+                  style="
+                    font-family: var(--mono);
+                    font-size: 19px;
+                    color: var(--accent);
+                    letter-spacing: -0.02em;
+                    margin-top: 3px;
+                  ">
+                  <span id="dnVal">11.8</span> <span style="font-size: 11px; color: var(--fg-3)">MB/s</span>
+                </div>
+              </div>
+              <div style="padding: 10px 12px">
+                <div style="font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--fg-3)">
+                  ETA
+                </div>
+                <div style="font-family: var(--mono); font-size: 19px; letter-spacing: -0.02em; margin-top: 3px">
+                  <span id="upVal">6:12</span> <span style="font-size: 11px; color: var(--fg-3)">min</span>
+                </div>
+              </div>
+            </div>
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                padding: 9px 12px;
+                border-top: 1px solid var(--line);
+                font-family: var(--mono);
+                font-size: 11px;
+                color: var(--fg-2);
+              ">
+              <span>peers <span id="peerVal" style="color: var(--fg)">47</span></span>
+              <span>tasks <span id="seedVal" style="color: var(--fg)">4</span></span>
+              <span style="color: var(--fg-3)">TCP · DHT</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="hx"
+        style="display: flex; overflow-x: auto; border-bottom: 1px solid var(--line); background: var(--bg-1)">
+        <div style="display: flex; min-width: max-content; width: 100%; max-width: 1320px; margin: 0 auto">
+          <div style="flex: 1; min-width: 180px; padding: 22px 20px; border-right: 1px solid var(--line)">
+            <div style="font-family: var(--mono); font-size: 22px; letter-spacing: -0.03em">
+              2.6<span style="font-size: 12px; color: var(--fg-3)">MB</span>
+              <span style="font-size: 12px; color: var(--fg-3)">/ 0.9MB</span>
+            </div>
+            <div
+              style="
+                font-family: var(--mono);
+                font-size: 10.5px;
+                letter-spacing: 0.08em;
+                color: var(--fg-3);
+                margin-top: 6px;
+              ">
+              DMG / EXE
+            </div>
+          </div>
+          <div style="flex: 1; min-width: 180px; padding: 22px 20px; border-right: 1px solid var(--line)">
+            <div style="font-family: var(--mono); font-size: 22px; letter-spacing: -0.03em">
+              0.4<span style="font-size: 12px; color: var(--fg-3)">%</span>
+            </div>
+            <div
+              style="
+                font-family: var(--mono);
+                font-size: 10.5px;
+                letter-spacing: 0.08em;
+                color: var(--fg-3);
+                margin-top: 6px;
+              ">
+              CPU @ 40 MB/s
+            </div>
+          </div>
+          <div style="flex: 1; min-width: 180px; padding: 22px 20px; border-right: 1px solid var(--line)">
+            <div style="font-family: var(--mono); font-size: 22px; letter-spacing: -0.03em">
+              38<span style="font-size: 12px; color: var(--fg-3)">ms</span>
+            </div>
+            <div
+              style="
+                font-family: var(--mono);
+                font-size: 10.5px;
+                letter-spacing: 0.08em;
+                color: var(--fg-3);
+                margin-top: 6px;
+              ">
+              COLD START
+            </div>
+          </div>
+          <div style="flex: 1; min-width: 180px; padding: 22px 20px; border-right: 1px solid var(--line)">
+            <div style="font-family: var(--mono); font-size: 22px; letter-spacing: -0.03em; color: var(--accent)">
+              0
+            </div>
+            <div
+              style="
+                font-family: var(--mono);
+                font-size: 10.5px;
+                letter-spacing: 0.08em;
+                color: var(--fg-3);
+                margin-top: 6px;
+              ">
+              TELEMETRY ENDPOINTS
+            </div>
+          </div>
+          <div style="flex: 1; min-width: 180px; padding: 22px 20px">
+            <div style="font-family: var(--mono); font-size: 22px; letter-spacing: -0.03em">40</div>
+            <div
+              style="
+                font-family: var(--mono);
+                font-size: 10.5px;
+                letter-spacing: 0.08em;
+                color: var(--fg-3);
+                margin-top: 6px;
+              ">
+              PEERS PER TORRENT
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="interface" style="border-bottom: 1px solid var(--line); padding: 88px 0 0; overflow: hidden">
+        <div
+          style="
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            gap: 24px;
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 0 20px 34px;
+          ">
+          <div>
+            <div
+              style="
+                font-family: var(--mono);
+                font-size: 11px;
+                letter-spacing: 0.1em;
+                color: var(--fg-3);
+                margin-bottom: 14px;
+              ">
+              01 — INTERFACE
+            </div>
+            <h2
+              style="
+                margin: 0;
+                font-size: clamp(28px, 3.6vw, 42px);
+                line-height: 1.02;
+                letter-spacing: -0.03em;
+                font-weight: 600;
+                max-width: 560px;
+              ">
+              Every number on screen is measured, not estimated.
+            </h2>
+          </div>
+          <div style="flex: 1; min-width: 220px; max-width: 360px; margin-left: auto">
+            <p style="margin: 0; font-size: 14.5px; line-height: 1.6; color: var(--fg-2); text-wrap: pretty">
+              A sidebar and a list. Drop a .torrent, paste a magnet or a YouTube link, and it starts — no dashboards, no
+              onboarding.
+            </p>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-top: 16px;
+                font-family: var(--mono);
+                font-size: 10.5px;
+                letter-spacing: 0.08em;
+                color: var(--fg-3);
+              ">
+              <span>SCROLL</span>
+              <span style="position: relative; flex: 1; height: 1px; background: var(--line-2); overflow: hidden">
+                <span
+                  id="galBar"
+                  style="
+                    position: absolute;
+                    inset: 0;
+                    background: var(--accent);
+                    transform-origin: left center;
+                    transform: scaleX(0.14);
+                  "></span>
+              </span>
+              <span id="galIdx">01/03</span>
+            </div>
+          </div>
+        </div>
+
+        <div
+          id="gallery"
+          class="hx"
+          style="
+            display: flex;
+            gap: 28px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding: 0 20px 90px;
+            scroll-padding-left: 20px;
+          ">
+          <figure
+            data-shot-1=""
+            style="flex: 0 0 auto; margin: 0; scroll-snap-align: center; position: relative; padding-right: 290px">
+            <div
+              style="
+                width: 1080px;
+                border: 1px solid var(--line-2);
+                border-radius: 12px;
+                overflow: hidden;
+                background: var(--bg-1);
+                box-shadow: 0 40px 80px -60px rgba(0, 0, 0, 0.9);
+              ">
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  height: 38px;
+                  padding: 0 15px;
+                  border-bottom: 1px solid var(--line);
+                  background: var(--bg-1);
+                ">
+                <span style="display: flex; gap: 8px"
+                  ><span style="width: 11px; height: 11px; border-radius: 50%; background: #ff5f57"></span
+                  ><span style="width: 11px; height: 11px; border-radius: 50%; background: #febc2e"></span
+                  ><span style="width: 11px; height: 11px; border-radius: 50%; background: #28c840"></span
+                ></span>
+              </div>
+              <div style="display: grid; grid-template-columns: 212px minmax(0, 1fr)">
+                <aside
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    border-right: 1px solid var(--line);
+                    padding: 14px 12px;
+                    background: var(--bg-1);
+                    min-height: 430px;
+                  ">
+                  <div style="display: flex; align-items: center; gap: 9px; padding: 2px 4px 18px">
+                    <svg width="26" height="26" viewBox="0 0 680 680" fill="none" aria-hidden="true">
+                      <path
+                        d="M500 40H180C102.68 40 40 102.68 40 180V500C40 577.32 102.68 640 180 640H500C577.32 640 640 577.32 640 500V180C640 102.68 577.32 40 500 40Z"
+                        fill="#181A1F"></path>
+                      <path opacity="0.55" d="M122.5 225L270 200" stroke="#615FFF" stroke-width="3"></path>
+                      <path opacity="0.55" d="M560 180L410 200" stroke="#615FFF" stroke-width="3"></path>
+                      <path opacity="0.55" d="M470 560L312 480" stroke="#615FFF" stroke-width="3"></path>
+                      <circle cx="111" cy="226" r="23.5" fill="#615FFF"></circle>
+                      <circle cx="568" cy="178" r="23.5" fill="#615FFF"></circle>
+                      <circle cx="478" cy="558" r="23.5" fill="#615FFF"></circle>
+                      <path
+                        d="M217 94V364.6H290.8V586L463 290.8H364.6L463 94H217Z"
+                        fill="url(#zg26)"
+                        stroke="#C2540E"
+                        stroke-width="2"></path>
+                      <defs>
+                        <linearGradient id="zg26" x1="217" y1="94" x2="217" y2="586" gradientUnits="userSpaceOnUse">
+                          <stop stop-color="#FFCB3D"></stop>
+                          <stop offset="1" stop-color="#EE6C1A"></stop>
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                    <span style="font-size: 14px; font-weight: 600; letter-spacing: -0.01em">Zorrent</span>
+                  </div>
+                  <div
+                    style="
+                      font-family: var(--mono);
+                      font-size: 9.5px;
+                      letter-spacing: 0.14em;
+                      color: var(--fg-3);
+                      padding: 0 6px 8px;
+                    ">
+                    LIBRARY
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 9px;
+                      padding: 8px 10px;
+                      border-radius: 8px;
+                      font-size: 12.5px;
+                      background: var(--bg-3);
+                      color: var(--fg);
+                    ">
+                    <svg width="13" height="13" viewBox="0 0 16 16" fill="var(--accent)" aria-hidden="true">
+                      <rect x="1" y="1" width="6" height="6" rx="1.5"></rect>
+                      <rect x="9" y="1" width="6" height="6" rx="1.5"></rect>
+                      <rect x="1" y="9" width="6" height="6" rx="1.5"></rect>
+                      <rect x="9" y="9" width="6" height="6" rx="1.5"></rect>
+                    </svg>
+                    <span style="flex: 1">All Tasks</span>
+                    <span
+                      style="
+                        font-family: var(--mono);
+                        font-size: 10.5px;
+                        color: var(--fg-2);
+                        background: var(--bg-2);
+                        border-radius: 5px;
+                        padding: 1px 6px;
+                      "
+                      >4</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 9px;
+                      padding: 8px 10px;
+                      border-radius: 8px;
+                      font-size: 12.5px;
+                      color: var(--fg-2);
+                    ">
+                    <svg
+                      width="13"
+                      height="13"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.4"
+                      aria-hidden="true">
+                      <path d="M8 1.5 v8 M4.5 6.5 L8 10 l3.5-3.5 M2 13.5 h12"></path>
+                    </svg>
+                    <span style="flex: 1">Downloading</span>
+                    <span
+                      style="
+                        font-family: var(--mono);
+                        font-size: 10.5px;
+                        color: var(--fg-2);
+                        background: var(--bg-2);
+                        border-radius: 5px;
+                        padding: 1px 6px;
+                      "
+                      >1</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 9px;
+                      padding: 8px 10px;
+                      border-radius: 8px;
+                      font-size: 12.5px;
+                      color: var(--fg-2);
+                    ">
+                    <svg
+                      width="13"
+                      height="13"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.4"
+                      aria-hidden="true">
+                      <circle cx="8" cy="8" r="6.3"></circle>
+                      <path d="M5.2 8.2 L7.2 10.2 L10.9 6"></path>
+                    </svg>
+                    <span style="flex: 1">Completed</span>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 9px;
+                      padding: 8px 10px;
+                      border-radius: 8px;
+                      font-size: 12.5px;
+                      color: var(--fg-2);
+                    ">
+                    <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                      <rect x="3" y="2.5" width="3.4" height="11" rx="1"></rect>
+                      <rect x="9.6" y="2.5" width="3.4" height="11" rx="1"></rect>
+                    </svg>
+                    <span style="flex: 1">Paused</span>
+                    <span
+                      style="
+                        font-family: var(--mono);
+                        font-size: 10.5px;
+                        color: var(--fg-2);
+                        background: var(--bg-2);
+                        border-radius: 5px;
+                        padding: 1px 6px;
+                      "
+                      >3</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 9px;
+                      padding: 8px 10px;
+                      border-radius: 8px;
+                      font-size: 12.5px;
+                      color: var(--fg-2);
+                    ">
+                    <svg
+                      width="13"
+                      height="13"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.4"
+                      aria-hidden="true">
+                      <circle cx="8" cy="8" r="6.3"></circle>
+                      <path d="M6.6 5.4 L11 8 l-4.4 2.6 z" fill="currentColor" stroke="none"></path>
+                    </svg>
+                    <span style="flex: 1">YouTube</span>
+                  </div>
+                  <div style="flex: 1; min-height: 34px"></div>
+                  <div style="border-radius: 10px; background: var(--bg-2); padding: 12px 13px">
+                    <div style="display: flex; align-items: center; gap: 8px; font-size: 11.5px; color: var(--fg-2)">
+                      <svg width="13" height="13" viewBox="0 0 16 16" fill="var(--accent)" aria-hidden="true">
+                        <rect x="2" y="3" width="12" height="2.4" rx="1.2"></rect>
+                        <rect x="2" y="7" width="12" height="2.4" rx="1.2"></rect>
+                        <rect x="2" y="11" width="8" height="2.4" rx="1.2"></rect>
+                      </svg>
+                      Downloaded
+                    </div>
+                    <div style="font-size: 19px; font-weight: 600; letter-spacing: -0.02em; margin-top: 7px">
+                      76.48 GB
+                    </div>
+                    <div style="font-family: var(--mono); font-size: 10.5px; color: var(--fg-3); margin-top: 3px">
+                      4 tasks
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 9px;
+                      padding: 12px 10px 2px;
+                      font-size: 12.5px;
+                      color: var(--fg-2);
+                    ">
+                    <svg
+                      width="13"
+                      height="13"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.3"
+                      aria-hidden="true">
+                      <circle cx="8" cy="8" r="2.4"></circle>
+                      <path
+                        d="M8 1.4 v1.8 M8 12.8 v1.8 M1.4 8 h1.8 M12.8 8 h1.8 M3.3 3.3 l1.3 1.3 M11.4 11.4 l1.3 1.3 M12.7 3.3 l-1.3 1.3 M4.6 11.4 l-1.3 1.3"></path>
+                    </svg>
+                    Settings
+                  </div>
+                </aside>
+                <div style="padding: 18px 20px 0">
+                  <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.02em">All Tasks</div>
+                  <div style="font-family: var(--mono); font-size: 11.5px; color: var(--fg-3); margin-top: 6px">
+                    4 total &nbsp;·&nbsp; 1 downloading &nbsp;·&nbsp; 0 completed
+                  </div>
+                  <div style="display: flex; gap: 12px; align-items: center; margin: 16px 0 18px">
+                    <div
+                      style="
+                        display: flex;
+                        align-items: center;
+                        gap: 9px;
+                        flex: 1;
+                        max-width: 420px;
+                        height: 38px;
+                        padding: 0 13px;
+                        border: 1px solid var(--accent);
+                        border-radius: 9px;
+                        background: var(--bg-2);
+                      ">
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        stroke="var(--fg-2)"
+                        stroke-width="1.5"
+                        aria-hidden="true">
+                        <circle cx="7" cy="7" r="4.6"></circle>
+                        <path d="M10.4 10.4 L14 14"></path>
+                      </svg>
+                      <span style="font-size: 12.5px; color: var(--fg-3)">Search downloads</span>
+                    </div>
+                    <div style="flex: 1"></div>
+                    <div
+                      style="
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        height: 38px;
+                        padding: 0 16px;
+                        border-radius: 9px;
+                        background: var(--accent);
+                        color: var(--on-accent);
+                        font-size: 13px;
+                        font-weight: 600;
+                      ">
+                      <svg
+                        width="13"
+                        height="13"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        aria-hidden="true">
+                        <path d="M8 3 v10 M3 8 h10"></path>
+                      </svg>
+                      Add Task
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      display: grid;
+                      grid-template-columns: minmax(90px, 1fr) 74px 96px 44px 76px 62px 50px;
+                      gap: 14px;
+                      align-items: center;
+                      padding: 0 14px 10px;
+                      font-family: var(--mono);
+                      font-size: 9.5px;
+                      letter-spacing: 0.12em;
+                      color: var(--fg-3);
+                    ">
+                    <span>NAME</span><span>SIZE</span><span>PROGRESS</span><span>PEERS</span><span>DOWN</span
+                    ><span>ETA</span><span></span>
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 8px; padding-bottom: 20px">
+                    <div
+                      style="
+                        display: grid;
+                        grid-template-columns: minmax(90px, 1fr) 74px 96px 44px 76px 62px 50px;
+                        gap: 14px;
+                        align-items: center;
+                        padding: 11px 14px;
+                        border-radius: 10px;
+                        background: var(--bg-2);
+                        font-size: 12.5px;
+                      ">
+                      <span style="display: flex; align-items: center; gap: 11px; min-width: 0">
+                        <span
+                          style="
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            width: 28px;
+                            height: 28px;
+                            flex: 0 0 28px;
+                            border-radius: 8px;
+                            background: color-mix(in oklab, var(--accent) 22%, transparent);
+                            color: var(--accent);
+                          "
+                          ><svg
+                            width="13"
+                            height="13"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.6"
+                            aria-hidden="true">
+                            <path d="M8 2 v8 M4.4 6.6 L8 10.2 l3.6-3.6"></path></svg
+                        ></span>
+                        <span
+                          style="
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                            font-weight: 500;
+                            color: var(--fg);
+                          "
+                          >ubuntu-26.04-desktop-amd64.iso</span
+                        >
+                      </span>
+                      <span style="font-family: var(--mono); color: var(--fg-2)">5.80 GB</span>
+                      <span style="position: relative; height: 4px; border-radius: 2px; background: var(--bg-3)"
+                        ><span
+                          style="
+                            position: absolute;
+                            left: 0;
+                            top: 0;
+                            bottom: 0;
+                            width: 34%;
+                            border-radius: 2px;
+                            background: var(--accent);
+                          "></span
+                      ></span>
+                      <span style="font-family: var(--mono); color: var(--fg-2)">34%</span>
+                      <span style="font-family: var(--mono); color: var(--accent)">11.8 MB/s</span>
+                      <span style="font-family: var(--mono); color: var(--fg-3)">6m 12s</span>
+                      <span style="display: flex; gap: 10px; justify-content: flex-end; color: var(--fg-3)"
+                        ><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                          <rect x="3" y="2.5" width="3.4" height="11" rx="1"></rect>
+                          <rect x="9.6" y="2.5" width="3.4" height="11" rx="1"></rect></svg
+                        ><svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.6"
+                          aria-hidden="true">
+                          <path d="M3.5 3.5 L12.5 12.5 M12.5 3.5 L3.5 12.5"></path></svg
+                      ></span>
+                    </div>
+                    <div
+                      style="
+                        display: grid;
+                        grid-template-columns: minmax(90px, 1fr) 74px 96px 44px 76px 62px 50px;
+                        gap: 14px;
+                        align-items: center;
+                        padding: 11px 14px;
+                        border-radius: 10px;
+                        background: var(--bg-2);
+                        font-size: 12.5px;
+                      ">
+                      <span style="display: flex; align-items: center; gap: 11px; min-width: 0">
+                        <span
+                          style="
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            width: 28px;
+                            height: 28px;
+                            flex: 0 0 28px;
+                            border-radius: 8px;
+                            background: var(--bg-3);
+                            color: var(--fg-2);
+                          "
+                          ><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                            <rect x="3" y="2.5" width="3.4" height="11" rx="1"></rect>
+                            <rect x="9.6" y="2.5" width="3.4" height="11" rx="1"></rect></svg
+                        ></span>
+                        <span
+                          style="
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                            font-weight: 500;
+                            color: var(--fg-2);
+                          "
+                          >archlinux-2026.07.01-x86_64.iso</span
+                        >
+                      </span>
+                      <span style="font-family: var(--mono); color: var(--fg-2)">1.20 GB</span>
+                      <span style="position: relative; height: 4px; border-radius: 2px; background: var(--bg-3)"
+                        ><span
+                          style="
+                            position: absolute;
+                            left: 0;
+                            top: 0;
+                            bottom: 0;
+                            width: 0%;
+                            border-radius: 2px;
+                            background: var(--fg-3);
+                          "></span
+                      ></span>
+                      <span style="font-family: var(--mono); color: var(--fg-2)">0%</span>
+                      <span style="font-family: var(--mono); color: var(--fg-3)">paused</span>
+                      <span style="font-family: var(--mono); color: var(--fg-3)">—</span>
+                      <span style="display: flex; gap: 10px; justify-content: flex-end; color: var(--fg-3)"
+                        ><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                          <path d="M4 2.6 L13 8 L4 13.4 z"></path></svg
+                        ><svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.6"
+                          aria-hidden="true">
+                          <path d="M3.5 3.5 L12.5 12.5 M12.5 3.5 L3.5 12.5"></path></svg
+                      ></span>
+                    </div>
+                    <div
+                      style="
+                        display: grid;
+                        grid-template-columns: minmax(90px, 1fr) 74px 96px 44px 76px 62px 50px;
+                        gap: 14px;
+                        align-items: center;
+                        padding: 11px 14px;
+                        border-radius: 10px;
+                        background: var(--bg-2);
+                        font-size: 12.5px;
+                      ">
+                      <span style="display: flex; align-items: center; gap: 11px; min-width: 0">
+                        <span
+                          style="
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            width: 28px;
+                            height: 28px;
+                            flex: 0 0 28px;
+                            border-radius: 8px;
+                            background: var(--bg-3);
+                            color: var(--fg-2);
+                          "
+                          ><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                            <rect x="3" y="2.5" width="3.4" height="11" rx="1"></rect>
+                            <rect x="9.6" y="2.5" width="3.4" height="11" rx="1"></rect></svg
+                        ></span>
+                        <span
+                          style="
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                            font-weight: 500;
+                            color: var(--fg-2);
+                          "
+                          >debian-13.1.0-amd64-netinst.iso</span
+                        >
+                      </span>
+                      <span style="font-family: var(--mono); color: var(--fg-2)">712 MB</span>
+                      <span style="position: relative; height: 4px; border-radius: 2px; background: var(--bg-3)"
+                        ><span
+                          style="
+                            position: absolute;
+                            left: 0;
+                            top: 0;
+                            bottom: 0;
+                            width: 62%;
+                            border-radius: 2px;
+                            background: var(--fg-3);
+                          "></span
+                      ></span>
+                      <span style="font-family: var(--mono); color: var(--fg-2)">62%</span>
+                      <span style="font-family: var(--mono); color: var(--fg-3)">paused</span>
+                      <span style="font-family: var(--mono); color: var(--fg-3)">—</span>
+                      <span style="display: flex; gap: 10px; justify-content: flex-end; color: var(--fg-3)"
+                        ><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                          <path d="M4 2.6 L13 8 L4 13.4 z"></path></svg
+                        ><svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.6"
+                          aria-hidden="true">
+                          <path d="M3.5 3.5 L12.5 12.5 M12.5 3.5 L3.5 12.5"></path></svg
+                      ></span>
+                    </div>
+                    <div
+                      style="
+                        display: grid;
+                        grid-template-columns: minmax(90px, 1fr) 74px 96px 44px 76px 62px 50px;
+                        gap: 14px;
+                        align-items: center;
+                        padding: 11px 14px;
+                        border-radius: 10px;
+                        background: var(--bg-2);
+                        font-size: 12.5px;
+                      ">
+                      <span style="display: flex; align-items: center; gap: 11px; min-width: 0">
+                        <span
+                          style="
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            width: 28px;
+                            height: 28px;
+                            flex: 0 0 28px;
+                            border-radius: 8px;
+                            background: var(--bg-3);
+                            color: var(--fg-2);
+                          "
+                          ><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                            <rect x="3" y="2.5" width="3.4" height="11" rx="1"></rect>
+                            <rect x="9.6" y="2.5" width="3.4" height="11" rx="1"></rect></svg
+                        ></span>
+                        <span
+                          style="
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                            font-weight: 500;
+                            color: var(--fg-2);
+                          "
+                          >blender-4.9-linux-x64.tar.xz</span
+                        >
+                      </span>
+                      <span style="font-family: var(--mono); color: var(--fg-2)">318 MB</span>
+                      <span style="position: relative; height: 4px; border-radius: 2px; background: var(--bg-3)"
+                        ><span
+                          style="
+                            position: absolute;
+                            left: 0;
+                            top: 0;
+                            bottom: 0;
+                            width: 18%;
+                            border-radius: 2px;
+                            background: var(--fg-3);
+                          "></span
+                      ></span>
+                      <span style="font-family: var(--mono); color: var(--fg-2)">18%</span>
+                      <span style="font-family: var(--mono); color: var(--fg-3)">paused</span>
+                      <span style="font-family: var(--mono); color: var(--fg-3)">—</span>
+                      <span style="display: flex; gap: 10px; justify-content: flex-end; color: var(--fg-3)"
+                        ><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                          <path d="M4 2.6 L13 8 L4 13.4 z"></path></svg
+                        ><svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.6"
+                          aria-hidden="true">
+                          <path d="M3.5 3.5 L12.5 12.5 M12.5 3.5 L3.5 12.5"></path></svg
+                      ></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <figcaption style="font-family: var(--mono); font-size: 10.5px; color: var(--fg-3); margin-top: 14px">
+              01 — ALL TASKS · every column is a measured value
+            </figcaption>
+
+            <div id="anno" style="position: absolute; inset: 0; pointer-events: none">
+              <div
+                style="position: absolute; left: 1080px; top: 150px; display: flex; align-items: flex-start; gap: 8px">
+                <svg width="88" height="24" viewBox="0 0 88 24" fill="none" aria-hidden="true">
+                  <path
+                    d="M0 12 L86 12"
+                    stroke="var(--fg-3)"
+                    stroke-width="1"
+                    stroke-dasharray="90"
+                    stroke-dashoffset="90"
+                    data-anim=""
+                    style="animation: draw 0.8s ease-out forwards paused"></path>
+                  <circle cx="1.5" cy="12" r="2.5" fill="var(--accent)"></circle>
+                </svg>
+                <span
+                  style="
+                    font-family: var(--mono);
+                    font-size: 10.5px;
+                    line-height: 1.45;
+                    color: var(--fg-3);
+                    margin-top: 5px;
+                    width: 160px;
+                  "
+                  >per-piece hash<br />verification, live</span
+                >
+              </div>
+              <div
+                style="position: absolute; left: 1080px; top: 250px; display: flex; align-items: flex-start; gap: 8px">
+                <svg width="88" height="48" viewBox="0 0 88 48" fill="none" aria-hidden="true">
+                  <path
+                    d="M0 12 L44 12 L44 40 L86 40"
+                    stroke="var(--fg-3)"
+                    stroke-width="1"
+                    stroke-dasharray="140"
+                    stroke-dashoffset="140"
+                    data-anim=""
+                    style="animation: draw 0.9s ease-out 0.15s forwards paused"></path>
+                  <circle cx="1.5" cy="12" r="2.5" fill="var(--accent)"></circle>
+                </svg>
+                <span
+                  style="
+                    font-family: var(--mono);
+                    font-size: 10.5px;
+                    line-height: 1.45;
+                    color: var(--fg-3);
+                    margin-top: 33px;
+                    width: 160px;
+                  "
+                  >swarm ranked by<br />measured throughput</span
+                >
+              </div>
+              <div
+                style="position: absolute; left: 1080px; top: 330px; display: flex; align-items: flex-start; gap: 8px">
+                <svg width="88" height="40" viewBox="0 0 88 40" fill="none" aria-hidden="true">
+                  <path
+                    d="M0 8 L44 8 L44 32 L86 32"
+                    stroke="var(--fg-3)"
+                    stroke-width="1"
+                    stroke-dasharray="130"
+                    stroke-dashoffset="130"
+                    data-anim=""
+                    style="animation: draw 0.9s ease-out 0.3s forwards paused"></path>
+                  <circle cx="1.5" cy="8" r="2.5" fill="var(--accent)"></circle>
+                </svg>
+                <span
+                  style="
+                    font-family: var(--mono);
+                    font-size: 10.5px;
+                    line-height: 1.45;
+                    color: var(--fg-3);
+                    margin-top: 25px;
+                    width: 160px;
+                  "
+                  >DHT node count,<br />sampled live</span
+                >
+              </div>
+            </div>
+          </figure>
+
+          <figure style="flex: 0 0 auto; margin: 0; scroll-snap-align: center">
+            <div
+              style="
+                width: 620px;
+                border: 1px solid var(--line-2);
+                border-radius: 12px;
+                overflow: hidden;
+                background: var(--bg-1);
+                box-shadow: 0 40px 80px -60px rgba(0, 0, 0, 0.9);
+              ">
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  height: 38px;
+                  padding: 0 15px;
+                  border-bottom: 1px solid var(--line);
+                ">
+                <span style="display: flex; gap: 8px"
+                  ><span style="width: 11px; height: 11px; border-radius: 50%; background: #ff5f57"></span
+                  ><span style="width: 11px; height: 11px; border-radius: 50%; background: #febc2e"></span
+                  ><span style="width: 11px; height: 11px; border-radius: 50%; background: #28c840"></span
+                ></span>
+              </div>
+              <div style="padding: 40px 40px 44px; background: var(--bg-3)">
+                <div
+                  style="
+                    position: relative;
+                    border: 1px solid var(--line-2);
+                    border-radius: 14px;
+                    background: var(--bg-2);
+                    padding: 26px 26px 22px;
+                    box-shadow: 0 30px 60px -40px rgba(0, 0, 0, 0.9);
+                  ">
+                  <div style="display: flex; align-items: flex-start; gap: 14px">
+                    <span
+                      style="
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 42px;
+                        height: 42px;
+                        flex: 0 0 42px;
+                        border-radius: 11px;
+                        background: var(--accent);
+                      ">
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        stroke="var(--on-accent)"
+                        stroke-width="1.9"
+                        aria-hidden="true">
+                        <path d="M8 3 v10 M3 8 h10"></path>
+                      </svg>
+                    </span>
+                    <div style="flex: 1">
+                      <div style="font-size: 17px; font-weight: 600; letter-spacing: -0.015em">Add Task</div>
+                      <div style="font-size: 13px; color: var(--fg-2); margin-top: 3px">
+                        Paste a magnet or YouTube link, or choose a file
+                      </div>
+                    </div>
+                    <svg
+                      width="17"
+                      height="17"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      stroke="var(--fg-2)"
+                      stroke-width="1.6"
+                      aria-hidden="true">
+                      <path d="M3.5 3.5 L12.5 12.5 M12.5 3.5 L3.5 12.5"></path>
+                    </svg>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      flex-direction: column;
+                      align-items: center;
+                      gap: 7px;
+                      margin-top: 22px;
+                      padding: 34px 20px;
+                      border: 1px dashed var(--line-2);
+                      border-radius: 12px;
+                    ">
+                    <svg
+                      width="26"
+                      height="26"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="var(--accent)"
+                      stroke-width="1.7"
+                      aria-hidden="true">
+                      <path d="M12 20 V5 M6.5 10.5 L12 5 l5.5 5.5"></path>
+                    </svg>
+                    <div style="font-size: 14.5px; font-weight: 600; margin-top: 4px">Drop a .torrent file here</div>
+                    <div style="font-size: 12.5px; color: var(--fg-2)">or click to browse</div>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 14px; margin: 20px 0 14px">
+                    <span style="flex: 1; height: 1px; background: var(--line)"></span>
+                    <span style="font-size: 12.5px; color: var(--fg-2); white-space: nowrap"
+                      >or paste a magnet / YouTube link</span
+                    >
+                    <span style="flex: 1; height: 1px; background: var(--line)"></span>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 11px;
+                      height: 46px;
+                      padding: 0 14px;
+                      border: 1px solid var(--accent);
+                      border-radius: 10px;
+                      background: var(--bg-3);
+                    ">
+                    <svg
+                      width="15"
+                      height="15"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      stroke="var(--fg-2)"
+                      stroke-width="1.4"
+                      aria-hidden="true">
+                      <path d="M6.6 9.4 a2.6 2.6 0 0 1 0-3.6 l1.8-1.8 a2.6 2.6 0 0 1 3.6 3.6 l-.9.9"></path>
+                      <path d="M9.4 6.6 a2.6 2.6 0 0 1 0 3.6 l-1.8 1.8 a2.6 2.6 0 0 1-3.6-3.6 l.9-.9"></path>
+                    </svg>
+                    <span style="font-family: var(--mono); font-size: 12.5px; color: var(--fg-3)"
+                      >magnet:?xt=…&nbsp; or a YouTube link</span
+                    >
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; gap: 11px; margin-top: 28px">
+                    <div
+                      style="
+                        display: flex;
+                        align-items: center;
+                        height: 42px;
+                        padding: 0 26px;
+                        border: 1px solid var(--line-2);
+                        border-radius: 10px;
+                        font-size: 13.5px;
+                        font-weight: 500;
+                      ">
+                      Cancel
+                    </div>
+                    <div
+                      style="
+                        display: flex;
+                        align-items: center;
+                        height: 42px;
+                        padding: 0 26px;
+                        border-radius: 10px;
+                        background: var(--accent);
+                        color: var(--on-accent);
+                        font-size: 13.5px;
+                        font-weight: 600;
+                        box-shadow: var(--glow);
+                      ">
+                      Add Task
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <figcaption style="font-family: var(--mono); font-size: 10.5px; color: var(--fg-3); margin-top: 14px">
+              02 — ADD TASK · .torrent, magnet, or YouTube URL
+            </figcaption>
+          </figure>
+
+          <figure style="flex: 0 0 auto; margin: 0; scroll-snap-align: center; padding-right: 20px">
+            <div
+              style="
+                width: 640px;
+                border: 1px solid var(--line-2);
+                border-radius: 12px;
+                overflow: hidden;
+                background: var(--bg-1);
+                box-shadow: 0 40px 80px -60px rgba(0, 0, 0, 0.9);
+              ">
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  height: 38px;
+                  padding: 0 15px;
+                  border-bottom: 1px solid var(--line);
+                ">
+                <span style="display: flex; gap: 8px"
+                  ><span style="width: 11px; height: 11px; border-radius: 50%; background: #ff5f57"></span
+                  ><span style="width: 11px; height: 11px; border-radius: 50%; background: #febc2e"></span
+                  ><span style="width: 11px; height: 11px; border-radius: 50%; background: #28c840"></span
+                ></span>
+              </div>
+              <div style="padding: 40px 40px 44px; background: var(--bg-3)">
+                <div
+                  style="
+                    position: relative;
+                    border: 1px solid var(--line-2);
+                    border-radius: 14px;
+                    background: var(--bg-2);
+                    padding: 26px 26px 22px;
+                    box-shadow: 0 30px 60px -40px rgba(0, 0, 0, 0.9);
+                  ">
+                  <div style="display: flex; align-items: flex-start; gap: 14px">
+                    <span
+                      style="
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 42px;
+                        height: 42px;
+                        flex: 0 0 42px;
+                        border-radius: 11px;
+                        background: var(--bg-3);
+                        border: 1px solid var(--line);
+                      ">
+                      <svg
+                        width="19"
+                        height="19"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        stroke="var(--fg)"
+                        stroke-width="1.2"
+                        aria-hidden="true">
+                        <circle cx="8" cy="8" r="2.3"></circle>
+                        <path
+                          d="M8 1.4 v1.8 M8 12.8 v1.8 M1.4 8 h1.8 M12.8 8 h1.8 M3.3 3.3 l1.3 1.3 M11.4 11.4 l1.3 1.3 M12.7 3.3 l-1.3 1.3 M4.6 11.4 l-1.3 1.3"></path>
+                      </svg>
+                    </span>
+                    <div style="flex: 1">
+                      <div style="font-size: 17px; font-weight: 600; letter-spacing: -0.015em">Settings</div>
+                      <div style="font-size: 13px; color: var(--fg-2); margin-top: 3px">General preferences</div>
+                    </div>
+                    <svg
+                      width="17"
+                      height="17"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      stroke="var(--fg-2)"
+                      stroke-width="1.6"
+                      aria-hidden="true">
+                      <path d="M3.5 3.5 L12.5 12.5 M12.5 3.5 L3.5 12.5"></path>
+                    </svg>
+                  </div>
+                  <div style="font-size: 13.5px; font-weight: 500; margin: 26px 0 9px">Download location</div>
+                  <div style="display: flex; gap: 11px">
+                    <div
+                      style="
+                        flex: 1;
+                        display: flex;
+                        align-items: center;
+                        gap: 11px;
+                        height: 44px;
+                        padding: 0 14px;
+                        border: 1px solid var(--accent);
+                        border-radius: 10px;
+                        background: var(--bg-3);
+                        overflow: hidden;
+                        white-space: nowrap;
+                      ">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="var(--accent)" aria-hidden="true">
+                        <path d="M1.6 13 V3.6 h4.4 l1.4 1.7 h7 V13 z"></path>
+                      </svg>
+                      <span style="font-size: 13px; color: var(--fg)">/Users/najmiter/Downloads/things/</span>
+                    </div>
+                    <div
+                      style="
+                        display: flex;
+                        align-items: center;
+                        height: 44px;
+                        padding: 0 20px;
+                        border: 1px solid var(--line-2);
+                        border-radius: 10px;
+                        font-size: 13.5px;
+                        font-weight: 500;
+                        color: var(--fg);
+                      ">
+                      Browse
+                    </div>
+                  </div>
+                  <div style="font-size: 13.5px; font-weight: 500; margin: 24px 0 9px">Max active downloads</div>
+                  <div style="display: flex; gap: 11px; align-items: center">
+                    <span
+                      style="
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 52px;
+                        height: 44px;
+                        border: 1px solid var(--line-2);
+                        border-radius: 10px;
+                        color: var(--fg-2);
+                      "
+                      ><svg
+                        width="15"
+                        height="15"
+                        viewBox="0 0 16 16"
+                        stroke="currentColor"
+                        stroke-width="1.6"
+                        aria-hidden="true">
+                        <path d="M3.5 8 h9"></path></svg
+                    ></span>
+                    <span
+                      style="
+                        flex: 1;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        height: 44px;
+                        border-radius: 10px;
+                        background: var(--bg-3);
+                        font-family: var(--mono);
+                        font-size: 15px;
+                      "
+                      >1</span
+                    >
+                    <span
+                      style="
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 52px;
+                        height: 44px;
+                        border: 1px solid var(--line-2);
+                        border-radius: 10px;
+                        color: var(--fg-2);
+                      "
+                      ><svg
+                        width="15"
+                        height="15"
+                        viewBox="0 0 16 16"
+                        stroke="currentColor"
+                        stroke-width="1.6"
+                        aria-hidden="true">
+                        <path d="M8 3.5 v9 M3.5 8 h9"></path></svg
+                    ></span>
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; gap: 11px; margin-top: 30px">
+                    <div
+                      style="
+                        display: flex;
+                        align-items: center;
+                        height: 42px;
+                        padding: 0 26px;
+                        border: 1px solid var(--line-2);
+                        border-radius: 10px;
+                        font-size: 13.5px;
+                        font-weight: 500;
+                      ">
+                      Cancel
+                    </div>
+                    <div
+                      style="
+                        display: flex;
+                        align-items: center;
+                        height: 42px;
+                        padding: 0 32px;
+                        border-radius: 10px;
+                        background: var(--accent);
+                        color: var(--on-accent);
+                        font-size: 13.5px;
+                        font-weight: 600;
+                        box-shadow: var(--glow);
+                      ">
+                      Save
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <figcaption style="font-family: var(--mono); font-size: 10.5px; color: var(--fg-3); margin-top: 14px">
+              03 — SETTINGS · two preferences, no tab bar
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section id="engine" style="border-bottom: 1px solid var(--line)">
+        <div style="max-width: 1320px; margin: 0 auto; padding: 0 20px">
+          <div
+            style="
+              display: grid;
+              grid-template-columns: minmax(0, 1fr);
+              gap: 40px;
+              padding: 80px 0;
+              border-bottom: 1px solid var(--line);
+            "
+            data-split="7-5">
+            <div style="max-width: 520px">
+              <div
+                style="
+                  font-family: var(--mono);
+                  font-size: 11px;
+                  letter-spacing: 0.1em;
+                  color: var(--fg-3);
+                  margin-bottom: 16px;
+                ">
+                02 — SCHEDULER
+              </div>
+              <h3
+                style="
+                  margin: 0 0 16px;
+                  font-size: clamp(24px, 2.8vw, 34px);
+                  line-height: 1.05;
+                  letter-spacing: -0.028em;
+                  font-weight: 600;
+                ">
+                Missing pieces are picked rarest-first.
+              </h3>
+              <p
+                style="
+                  margin: 0;
+                  font-size: 15px;
+                  line-height: 1.62;
+                  color: var(--fg-2);
+                  max-width: 440px;
+                  text-wrap: pretty;
+                ">
+                Every claim looks at which piece the fewest connected peers have and takes that one, with ties broken at
+                random so the swarm doesn't collapse onto the same piece. Up to 40 peer connections per torrent, 64
+                block requests pipelined per connection.
+              </p>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px">
+                <span
+                  style="
+                    font-family: var(--mono);
+                    font-size: 11px;
+                    color: var(--fg-3);
+                    border: 1px solid var(--line);
+                    padding: 4px 8px;
+                  "
+                  >40 peers / torrent</span
+                >
+                <span
+                  style="
+                    font-family: var(--mono);
+                    font-size: 11px;
+                    color: var(--fg-3);
+                    border: 1px solid var(--line);
+                    padding: 4px 8px;
+                  "
+                  >64 in-flight requests</span
+                >
+                <span
+                  style="
+                    font-family: var(--mono);
+                    font-size: 11px;
+                    color: var(--fg-3);
+                    border: 1px solid var(--line);
+                    padding: 4px 8px;
+                  "
+                  >rarest-first</span
+                >
+              </div>
+            </div>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid var(--line);
+                background: var(--bg-1);
+                min-height: 280px;
+                padding: 24px;
+              ">
+              <svg
+                viewBox="0 0 320 240"
+                width="100%"
+                style="max-width: 340px; overflow: visible"
+                fill="none"
+                aria-hidden="true">
+                <line
+                  x1="160"
+                  y1="120"
+                  x2="40"
+                  y2="40"
+                  stroke="var(--accent-line)"
+                  stroke-width="1"
+                  stroke-dasharray="150"
+                  stroke-dashoffset="150"
+                  data-anim=""
+                  style="animation: draw 0.9s ease-out 0.05s forwards paused"></line>
+                <line
+                  x1="160"
+                  y1="120"
+                  x2="290"
+                  y2="52"
+                  stroke="var(--accent-line)"
+                  stroke-width="1"
+                  stroke-dasharray="150"
+                  stroke-dashoffset="150"
+                  data-anim=""
+                  style="animation: draw 0.9s ease-out 0.18s forwards paused"></line>
+                <line
+                  x1="160"
+                  y1="120"
+                  x2="36"
+                  y2="188"
+                  stroke="var(--accent-line)"
+                  stroke-width="1"
+                  stroke-dasharray="150"
+                  stroke-dashoffset="150"
+                  data-anim=""
+                  style="animation: draw 0.9s ease-out 0.3s forwards paused"></line>
+                <line
+                  x1="160"
+                  y1="120"
+                  x2="272"
+                  y2="204"
+                  stroke="var(--accent-line)"
+                  stroke-width="1"
+                  stroke-dasharray="150"
+                  stroke-dashoffset="150"
+                  data-anim=""
+                  style="animation: draw 0.9s ease-out 0.42s forwards paused"></line>
+                <line
+                  x1="160"
+                  y1="120"
+                  x2="150"
+                  y2="18"
+                  stroke="var(--accent-line)"
+                  stroke-width="1"
+                  stroke-dasharray="150"
+                  stroke-dashoffset="150"
+                  data-anim=""
+                  style="animation: draw 0.9s ease-out 0.54s forwards paused"></line>
+                <line
+                  x1="160"
+                  y1="120"
+                  x2="176"
+                  y2="228"
+                  stroke="var(--line-2)"
+                  stroke-width="1"
+                  stroke-dasharray="150"
+                  stroke-dashoffset="150"
+                  data-anim=""
+                  style="animation: draw 0.9s ease-out 0.66s forwards paused"></line>
+                <line
+                  x1="160"
+                  y1="120"
+                  x2="300"
+                  y2="130"
+                  stroke="var(--line-2)"
+                  stroke-width="1"
+                  stroke-dasharray="150"
+                  stroke-dashoffset="150"
+                  data-anim=""
+                  style="animation: draw 0.9s ease-out 0.78s forwards paused"></line>
+                <rect
+                  x="150"
+                  y="110"
+                  width="20"
+                  height="20"
+                  fill="var(--accent)"
+                  data-anim=""
+                  style="animation: fade 0.4s ease-out forwards paused"></rect>
+                <rect
+                  x="34"
+                  y="34"
+                  width="12"
+                  height="12"
+                  fill="var(--accent)"
+                  opacity=".12"
+                  data-anim=""
+                  style="animation: nodeon 0.5s ease-out 0.5s forwards paused"></rect>
+                <rect
+                  x="284"
+                  y="46"
+                  width="12"
+                  height="12"
+                  fill="var(--accent)"
+                  opacity=".12"
+                  data-anim=""
+                  style="animation: nodeon 0.5s ease-out 0.62s forwards paused"></rect>
+                <rect
+                  x="30"
+                  y="182"
+                  width="12"
+                  height="12"
+                  fill="var(--accent)"
+                  opacity=".12"
+                  data-anim=""
+                  style="animation: nodeon 0.5s ease-out 0.74s forwards paused"></rect>
+                <rect
+                  x="266"
+                  y="198"
+                  width="12"
+                  height="12"
+                  fill="var(--accent)"
+                  opacity=".12"
+                  data-anim=""
+                  style="animation: nodeon 0.5s ease-out 0.86s forwards paused"></rect>
+                <rect
+                  x="144"
+                  y="12"
+                  width="12"
+                  height="12"
+                  fill="var(--accent)"
+                  opacity=".12"
+                  data-anim=""
+                  style="animation: nodeon 0.5s ease-out 0.98s forwards paused"></rect>
+                <rect x="170" y="222" width="12" height="12" fill="var(--fg-3)" opacity=".3"></rect>
+                <rect x="294" y="124" width="12" height="12" fill="var(--fg-3)" opacity=".3"></rect>
+                <text x="40" y="26" font-family="ui-monospace, monospace" font-size="9" fill="var(--fg-3)">
+                  3.1 MB/s
+                </text>
+                <text x="284" y="38" font-family="ui-monospace, monospace" font-size="9" fill="var(--fg-3)">
+                  2.8 MB/s
+                </text>
+                <text x="30" y="210" font-family="ui-monospace, monospace" font-size="9" fill="var(--fg-3)">
+                  1.0 MB/s
+                </text>
+                <text x="188" y="232" font-family="ui-monospace, monospace" font-size="9" fill="var(--fg-3)">
+                  choked
+                </text>
+              </svg>
+            </div>
+          </div>
+
+          <div
+            style="
+              display: grid;
+              grid-template-columns: minmax(0, 1fr);
+              gap: 40px;
+              padding: 80px 0;
+              border-bottom: 1px solid var(--line);
+            "
+            data-split="5-7">
+            <div
+              style="
+                border: 1px solid var(--line);
+                background: var(--bg-1);
+                padding: 26px 24px;
+                min-height: 280px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+              ">
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  font-family: var(--mono);
+                  font-size: 10.5px;
+                  color: var(--fg-3);
+                  margin-bottom: 10px;
+                ">
+                <span>REAL THROUGHPUT · 90 s</span><span>PEAK 41.2 MB/s</span>
+              </div>
+              <svg
+                viewBox="0 0 400 130"
+                width="100%"
+                fill="none"
+                preserveAspectRatio="none"
+                style="height: 130px"
+                aria-hidden="true">
+                <line x1="0" y1="32" x2="400" y2="32" stroke="var(--line)" stroke-width="1"></line>
+                <line x1="0" y1="72" x2="400" y2="72" stroke="var(--line)" stroke-width="1"></line>
+                <line x1="0" y1="112" x2="400" y2="112" stroke="var(--line)" stroke-width="1"></line>
+                <path
+                  d="M0 122 L14 104 L28 112 L42 78 L56 84 L70 52 L84 60 L98 38 L112 44 L126 26 L140 34 L154 22 L168 30 L182 18 L196 26 L210 16 L224 22 L238 14 L252 20 L266 12 L280 18 L294 11 L308 16 L322 10 L336 14 L350 9 L364 13 L378 8 L400 10"
+                  stroke="var(--accent)"
+                  stroke-width="1.5"
+                  stroke-dasharray="620"
+                  stroke-dashoffset="620"
+                  data-anim=""
+                  style="animation: draw 2.2s cubic-bezier(0.2, 0.6, 0.25, 1) forwards paused"></path>
+                <rect x="0" y="0" width="400" height="130" fill="none"></rect>
+              </svg>
+              <div style="margin-top: 18px">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    font-family: var(--mono);
+                    font-size: 10.5px;
+                    color: var(--fg-3);
+                    margin-bottom: 7px;
+                  ">
+                  <span>PIECES VERIFIED</span><span>2048 / 2048</span>
+                </div>
+                <div style="position: relative; height: 5px; background: var(--line); overflow: hidden">
+                  <span
+                    data-anim=""
+                    style="
+                      position: absolute;
+                      inset: 0;
+                      background: var(--accent);
+                      transform-origin: left center;
+                      transform: scaleX(0);
+                      animation: barjag 2.6s linear forwards paused;
+                    "></span>
+                </div>
+              </div>
+            </div>
+            <div style="max-width: 520px">
+              <div
+                style="
+                  font-family: var(--mono);
+                  font-size: 11px;
+                  letter-spacing: 0.1em;
+                  color: var(--fg-3);
+                  margin-bottom: 16px;
+                ">
+                03 — DISK &amp; I/O
+              </div>
+              <h3
+                style="
+                  margin: 0 0 16px;
+                  font-size: clamp(24px, 2.8vw, 34px);
+                  line-height: 1.05;
+                  letter-spacing: -0.028em;
+                  font-weight: 600;
+                ">
+                Writes go straight to the kernel.
+              </h3>
+              <p
+                style="
+                  margin: 0 0 20px;
+                  font-size: 15px;
+                  line-height: 1.62;
+                  color: var(--fg-2);
+                  max-width: 440px;
+                  text-wrap: pretty;
+                ">
+                Overlapped (async) I/O on Windows, standard buffered file I/O on macOS. Piece hashing runs off the UI
+                thread on a dedicated pool, so verifying a large torrent doesn't freeze the window while the disk is
+                busy.
+              </p>
+              <dl
+                style="
+                  display: grid;
+                  grid-template-columns: repeat(2, minmax(0, 1fr));
+                  gap: 1px;
+                  background: var(--line);
+                  border: 1px solid var(--line);
+                  margin: 0;
+                ">
+                <div style="background: var(--bg); padding: 12px 14px">
+                  <dt style="font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--fg-3)">
+                    ALLOCATION
+                  </dt>
+                  <dd style="margin: 5px 0 0; font-size: 13.5px">Sparse, preallocated</dd>
+                </div>
+                <div style="background: var(--bg); padding: 12px 14px">
+                  <dt style="font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--fg-3)">
+                    HASH
+                  </dt>
+                  <dd style="margin: 5px 0 0; font-size: 13.5px">SHA-1 (BitTorrent v1)</dd>
+                </div>
+                <div style="background: var(--bg); padding: 12px 14px">
+                  <dt style="font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--fg-3)">
+                    PER-PEER BUFFER
+                  </dt>
+                  <dd style="margin: 5px 0 0; font-size: 13.5px">32 KB scratch</dd>
+                </div>
+                <div style="background: var(--bg); padding: 12px 14px">
+                  <dt style="font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--fg-3)">
+                    RESUME
+                  </dt>
+                  <dd style="margin: 5px 0 0; font-size: 13.5px">Atomic write + rename</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+
+          <div
+            style="display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; padding: 80px 0"
+            data-split="7-5">
+            <div style="max-width: 520px">
+              <div
+                style="
+                  font-family: var(--mono);
+                  font-size: 11px;
+                  letter-spacing: 0.1em;
+                  color: var(--fg-3);
+                  margin-bottom: 16px;
+                ">
+                04 — PRIVACY
+              </div>
+              <h3
+                style="
+                  margin: 0 0 16px;
+                  font-size: clamp(24px, 2.8vw, 34px);
+                  line-height: 1.05;
+                  letter-spacing: -0.028em;
+                  font-weight: 600;
+                ">
+                No accounts, no telemetry, nothing to configure.
+              </h3>
+              <p
+                style="
+                  margin: 0;
+                  font-size: 15px;
+                  line-height: 1.62;
+                  color: var(--fg-2);
+                  max-width: 440px;
+                  text-wrap: pretty;
+                ">
+                There's no sign-in, no analytics, and no phone-home beyond checking a version file for updates.
+                Everything Zorrent needs to remember — settings, progress, what you've downloaded — lives in a plain
+                local folder. Note: the peer wire protocol itself isn't encrypted (no MSE/PE), and there's no
+                per-interface kill switch — if you need either, Zorrent isn't the right tool yet.
+              </p>
+              <div
+                style="
+                  font-family: var(--mono);
+                  font-size: 12px;
+                  color: var(--fg-2);
+                  border-left: 1px solid var(--accent);
+                  padding: 10px 0 10px 14px;
+                  margin-top: 22px;
+                  background: var(--accent-soft);
+                ">
+                ~/.zorrent/settings.json<br /><span style="color: var(--fg-3)"
+                  >{ "download_dir": "...", "max_active_tasks": 3 }</span
+                >
+              </div>
+            </div>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid var(--line);
+                background: var(--bg-1);
+                min-height: 260px;
+                padding: 24px;
+              ">
+              <svg viewBox="0 0 300 180" width="100%" style="max-width: 300px" fill="none" aria-hidden="true">
+                <rect x="20" y="40" width="72" height="100" stroke="var(--line-2)" stroke-width="1"></rect>
+                <rect x="208" y="40" width="72" height="100" stroke="var(--line-2)" stroke-width="1"></rect>
+                <text x="20" y="32" font-family="ui-monospace, monospace" font-size="9" fill="var(--fg-3)">LOCAL</text>
+                <text x="208" y="32" font-family="ui-monospace, monospace" font-size="9" fill="var(--fg-3)">PEER</text>
+                <path
+                  d="M92 68 L208 68"
+                  stroke="var(--accent)"
+                  stroke-width="1"
+                  stroke-dasharray="120"
+                  stroke-dashoffset="120"
+                  data-anim=""
+                  style="animation: draw 0.7s ease-out 0.1s forwards paused"></path>
+                <path
+                  d="M208 90 L92 90"
+                  stroke="var(--accent)"
+                  stroke-width="1"
+                  stroke-dasharray="120"
+                  stroke-dashoffset="120"
+                  data-anim=""
+                  style="animation: draw 0.7s ease-out 0.4s forwards paused"></path>
+                <path
+                  d="M92 112 L208 112"
+                  stroke="var(--accent)"
+                  stroke-width="1"
+                  stroke-dasharray="120"
+                  stroke-dashoffset="120"
+                  data-anim=""
+                  style="animation: draw 0.7s ease-out 0.7s forwards paused"></path>
+                <text x="116" y="62" font-family="ui-monospace, monospace" font-size="9" fill="var(--fg-3)">
+                  handshake
+                </text>
+                <text x="120" y="84" font-family="ui-monospace, monospace" font-size="9" fill="var(--fg-3)">
+                  bitfield
+                </text>
+                <text x="108" y="106" font-family="ui-monospace, monospace" font-size="9" fill="var(--accent)">
+                  piece request
+                </text>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="protocol" style="border-bottom: 1px solid var(--line); background: var(--bg-1)">
+        <div
+          style="display: grid; grid-template-columns: minmax(0, 1fr); max-width: 1320px; margin: 0 auto"
+          data-proto="">
+          <div style="padding: 56px 20px; border-right: 1px solid var(--line)">
+            <div
+              style="
+                font-family: var(--mono);
+                font-size: 11px;
+                letter-spacing: 0.1em;
+                color: var(--fg-3);
+                margin-bottom: 16px;
+              ">
+              05 — PROTOCOL SUPPORT
+            </div>
+            <h2
+              style="
+                margin: 0 0 14px;
+                font-size: clamp(24px, 2.6vw, 32px);
+                line-height: 1.06;
+                letter-spacing: -0.028em;
+                font-weight: 600;
+                max-width: 340px;
+              ">
+              The small set of BEPs it actually speaks.
+            </h2>
+            <p
+              style="
+                margin: 0;
+                font-size: 14.5px;
+                line-height: 1.6;
+                color: var(--fg-2);
+                max-width: 340px;
+                text-wrap: pretty;
+              ">
+              Enough to find peers and pull data reliably. No PEX, no µTP, no v2/hybrid torrents, no WebSeed, no wire
+              encryption — those aren't implemented yet.
+            </p>
+          </div>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(2, minmax(0, 1fr));
+              gap: 1px;
+              background: var(--line);
+              border-top: 1px solid var(--line);
+            "
+            data-bep="">
+            <div style="background: var(--bg-1); padding: 16px 20px">
+              <div style="font-family: var(--mono); font-size: 12.5px">BEP 3 · Core</div>
+              <div style="font-size: 12px; color: var(--fg-3); margin-top: 4px">Peer wire protocol</div>
+            </div>
+            <div style="background: var(--bg-1); padding: 16px 20px">
+              <div style="font-family: var(--mono); font-size: 12.5px">BEP 5 · DHT</div>
+              <div style="font-size: 12px; color: var(--fg-3); margin-top: 4px">Trackerless, IPv4 + IPv6</div>
+            </div>
+            <div style="background: var(--bg-1); padding: 16px 20px">
+              <div style="font-family: var(--mono); font-size: 12.5px">BEP 9 · Magnet</div>
+              <div style="font-size: 12px; color: var(--fg-3); margin-top: 4px">Metadata over the wire</div>
+            </div>
+            <div style="background: var(--bg-1); padding: 16px 20px">
+              <div style="font-family: var(--mono); font-size: 12.5px">BEP 10 · Extension</div>
+              <div style="font-size: 12px; color: var(--fg-3); margin-top: 4px">ut_metadata handshake</div>
+            </div>
+            <div style="background: var(--bg-1); padding: 16px 20px">
+              <div style="font-family: var(--mono); font-size: 12.5px">HTTP + UDP</div>
+              <div style="font-size: 12px; color: var(--fg-3); margin-top: 4px">Classic tracker announce</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="install" style="border-bottom: 1px solid var(--line)">
+        <div style="max-width: 1320px; margin: 0 auto; padding: 88px 20px">
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr); gap: 48px" data-install="">
+            <div>
+              <h2
+                style="
+                  margin: 0 0 18px;
+                  font-size: clamp(30px, 4.4vw, 52px);
+                  line-height: 1;
+                  letter-spacing: -0.032em;
+                  font-weight: 600;
+                ">
+                Two small downloads.<br />No package manager needed.
+              </h2>
+              <p
+                style="
+                  margin: 0;
+                  max-width: 400px;
+                  font-size: 15px;
+                  line-height: 1.6;
+                  color: var(--fg-2);
+                  text-wrap: pretty;
+                ">
+                Drag it to Applications on macOS, run the installer on Windows. No package manager, no update daemon in
+                your login items. macOS and Windows today; Linux when it is actually ready.
+              </p>
+            </div>
+            <div>
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: repeat(2, minmax(0, 1fr));
+                  gap: 1px;
+                  background: var(--line);
+                  border: 1px solid var(--line);
+                ">
+                <a
+                  href="https://github.com/najmiter/zorrent-releases/releases/latest/download/Zorrent.dmg"
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
+                    background: var(--bg);
+                    padding: 22px 22px 20px;
+                    color: var(--fg);
+                  "
+                  data-hover="background:var(--bg-2)">
+                  <div style="display: flex; align-items: baseline; gap: 9px">
+                    <span style="font-size: 16px; font-weight: 600; letter-spacing: -0.015em">macOS</span
+                    ><span style="font-family: var(--mono); font-size: 11px; color: var(--accent)">2.6 MB</span>
+                  </div>
+                  <div style="font-family: var(--mono); font-size: 11.5px; color: var(--fg-3)">
+                    Zorrent.dmg · Apple silicon + Intel
+                  </div>
+                  <div style="font-family: var(--mono); font-size: 11px; color: var(--fg-3); margin-top: 6px">
+                    ad-hoc signed, not notarized · macOS 11+
+                  </div>
+                </a>
+                <a
+                  href="https://github.com/najmiter/zorrent-releases/releases/latest/download/ZorrentSetup.exe"
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
+                    background: var(--bg);
+                    padding: 22px 22px 20px;
+                    color: var(--fg);
+                  "
+                  data-hover="background:var(--bg-2)">
+                  <div style="display: flex; align-items: baseline; gap: 9px">
+                    <span style="font-size: 16px; font-weight: 600; letter-spacing: -0.015em">Windows</span
+                    ><span style="font-family: var(--mono); font-size: 11px; color: var(--accent)">0.9 MB</span>
+                  </div>
+                  <div style="font-family: var(--mono); font-size: 11.5px; color: var(--fg-3)">
+                    ZorrentSetup.exe · x64
+                  </div>
+                  <div style="font-family: var(--mono); font-size: 11px; color: var(--fg-3); margin-top: 6px">
+                    unsigned installer · Windows 10+
+                  </div>
+                </a>
+              </div>
+              <div style="font-family: var(--mono); font-size: 11px; color: var(--fg-3); margin-top: 14px">
+                sha256 · 9f2c41ab7e0d…c81 &nbsp;·&nbsp; released 2026-07-23
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer
+        style="
+          max-width: 1320px;
+          margin: 0 auto;
+          padding: 26px 20px 40px;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 18px;
+          align-items: center;
+          font-family: var(--mono);
+          font-size: 11px;
+          color: var(--fg-3);
+        ">
+        <span style="display: flex; align-items: center; gap: 8px; color: var(--fg-2)"
+          ><svg width="16" height="16" viewBox="0 0 680 680" fill="none" aria-hidden="true">
+            <path
+              d="M500 40H180C102.68 40 40 102.68 40 180V500C40 577.32 102.68 640 180 640H500C577.32 640 640 577.32 640 500V180C640 102.68 577.32 40 500 40Z"
+              fill="#181A1F"></path>
+            <path opacity="0.55" d="M122.5 225L270 200" stroke="#615FFF" stroke-width="3"></path>
+            <path opacity="0.55" d="M560 180L410 200" stroke="#615FFF" stroke-width="3"></path>
+            <path opacity="0.55" d="M470 560L312 480" stroke="#615FFF" stroke-width="3"></path>
+            <circle cx="111" cy="226" r="23.5" fill="#615FFF"></circle>
+            <circle cx="568" cy="178" r="23.5" fill="#615FFF"></circle>
+            <circle cx="478" cy="558" r="23.5" fill="#615FFF"></circle>
+            <path
+              d="M217 94V364.6H290.8V586L463 290.8H364.6L463 94H217Z"
+              fill="url(#zg16)"
+              stroke="#C2540E"
+              stroke-width="2"></path>
+            <defs>
+              <linearGradient id="zg16" x1="217" y1="94" x2="217" y2="586" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#FFCB3D"></stop>
+                <stop offset="1" stop-color="#EE6C1A"></stop>
+              </linearGradient>
+            </defs></svg
+          >ZORRENT 1.3.2</span
+        >
+        <span>Personal-use, source-available</span>
+        <span style="flex: 1"></span>
+        <a
+          href="https://github.com/najmiter"
+          target="_blank"
+          rel="noopener noreferrer"
+          style="color: var(--fg-3)"
+          data-hover="color:var(--fg)"
+          >Author</a
+        >
+      </footer>
+    </div>
+    <script src="./main.js"></script>
+  </body>
+</html>
