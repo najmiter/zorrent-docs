@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Terms of Service — Zorrent</title>
+    <meta name="description" content="The terms that apply when you use the Zorrent app for Android." />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="canonical" href="https://zorrent.knoctal.com/terms/" />
+    <link rel="icon" href="/icons/zorrent_logo.svg" type="image/svg+xml" />
+    <link rel="icon" href="/icons/zorrent_logo.png" type="image/png" sizes="680x680" />
+    <link rel="apple-touch-icon" href="/icons/zorrent_logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap"
+      rel="stylesheet" />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #07080f;
+        --bg-1: #0b0c15;
+        --bg-2: #101120;
+        --line: #1c1d2e;
+        --line-2: #2b2c44;
+        --fg: #e9eaf2;
+        --fg-2: #9294ac;
+        --fg-3: #9c9dad;
+        --accent: #615fff;
+        --accent-text: #8f89ff;
+        --sans: 'Instrument Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        --mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        -webkit-text-size-adjust: 100%;
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font-family: var(--sans);
+        font-size: 16px;
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+      }
+      a {
+        color: var(--accent-text);
+        text-decoration: underline;
+        text-decoration-color: color-mix(in oklab, var(--accent-text) 40%, transparent);
+        text-underline-offset: 3px;
+      }
+      a:hover {
+        color: var(--fg);
+      }
+      ::selection {
+        background: var(--accent);
+        color: #fff;
+      }
+      header.bar {
+        border-bottom: 1px solid var(--line);
+      }
+      .bar-inner {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 18px 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--fg);
+        text-decoration: none;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+      .brand:hover {
+        color: var(--fg);
+      }
+      main {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 56px 20px 72px;
+      }
+      .eyebrow {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--fg-3);
+        letter-spacing: 0.04em;
+        margin: 0 0 14px;
+      }
+      h1 {
+        font-size: clamp(32px, 6vw, 44px);
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        margin: 0 0 16px;
+      }
+      .lede {
+        color: var(--fg-2);
+        font-size: 18px;
+        margin: 0 0 36px;
+      }
+      .summary {
+        border: 1px solid var(--line-2);
+        background: var(--bg-1);
+        border-radius: 16px;
+        padding: 20px 22px;
+        margin: 0 0 48px;
+      }
+      .summary h2 {
+        margin-top: 0;
+        font-size: 16px;
+      }
+      .summary ul {
+        margin: 0;
+        padding-left: 20px;
+      }
+      .summary li + li {
+        margin-top: 6px;
+      }
+      nav.toc {
+        margin: 0 0 48px;
+      }
+      nav.toc ol {
+        margin: 0;
+        padding-left: 22px;
+        color: var(--fg-2);
+        columns: 2 220px;
+        column-gap: 32px;
+      }
+      nav.toc li {
+        break-inside: avoid;
+        margin-bottom: 4px;
+      }
+      section {
+        padding-top: 8px;
+        margin-bottom: 36px;
+        scroll-margin-top: 24px;
+      }
+      h2 {
+        font-size: 22px;
+        letter-spacing: -0.01em;
+        line-height: 1.3;
+        margin: 0 0 12px;
+      }
+      h3 {
+        font-size: 17px;
+        margin: 22px 0 8px;
+      }
+      p,
+      ul {
+        margin: 0 0 14px;
+      }
+      ul {
+        padding-left: 22px;
+      }
+      li + li {
+        margin-top: 6px;
+      }
+      .muted {
+        color: var(--fg-2);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 6px 0 16px;
+        font-size: 15px;
+      }
+      th,
+      td {
+        text-align: left;
+        vertical-align: top;
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--line);
+      }
+      th {
+        color: var(--fg-3);
+        font-weight: 600;
+        font-size: 13px;
+      }
+      td code,
+      p code {
+        font-family: var(--mono);
+        font-size: 13px;
+        color: var(--fg);
+        background: var(--bg-2);
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 1px 6px;
+        overflow-wrap: anywhere;
+      }
+      .table-wrap {
+        overflow-x: auto;
+      }
+      footer {
+        border-top: 1px solid var(--line);
+      }
+      .foot-inner {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 24px 20px 40px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--fg-3);
+      }
+      .foot-inner a {
+        color: var(--fg-3);
+        text-decoration: none;
+      }
+      .foot-inner a:hover {
+        color: var(--fg);
+      }
+      .spacer {
+        flex: 1;
+      }
+      @media (max-width: 520px) {
+        main {
+          padding-top: 40px;
+        }
+        th,
+        td {
+          padding: 9px 8px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="bar">
+      <div class="bar-inner">
+        <a class="brand" href="/">
+          <img src="/icons/zorrent_logo.svg" alt="" width="24" height="24" />
+          Zorrent
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <p class="eyebrow">LAST UPDATED · 5 NOVEMBER 2026</p>
+      <h1>Terms of Service</h1>
+      <p class="lede">
+        These terms govern your use of the Zorrent app for Android and this website. Zorrent is developed by Najam
+        (najmiter), referred to here as “we” or “us”. By installing or using Zorrent you agree to these terms.
+      </p>
+
+      <div class="summary">
+        <h2>The short version</h2>
+        <ul>
+          <li>Zorrent is a free BitTorrent client. It doesn’t provide, host or index any content.</li>
+          <li>You are responsible for what you download and share, and for following the laws that apply to you.</li>
+          <li>Don’t use Zorrent to infringe copyright or to break the law.</li>
+          <li>The app is provided as is, with ads, and without warranties.</li>
+        </ul>
+      </div>
+
+      <nav class="toc" aria-label="Contents">
+        <ol>
+          <li><a href="#acceptance">Acceptance</a></li>
+          <li><a href="#service">The app</a></li>
+          <li><a href="#license">License</a></li>
+          <li><a href="#responsibility">Your responsibility</a></li>
+          <li><a href="#acceptable-use">Acceptable use</a></li>
+          <li><a href="#copyright">Copyright and takedowns</a></li>
+          <li><a href="#ads">Advertising</a></li>
+          <li><a href="#third-parties">Third parties</a></li>
+          <li><a href="#privacy">Privacy</a></li>
+          <li><a href="#warranty">No warranty</a></li>
+          <li><a href="#liability">Limitation of liability</a></li>
+          <li><a href="#indemnity">Indemnity</a></li>
+          <li><a href="#termination">Termination</a></li>
+          <li><a href="#changes">Changes to these terms</a></li>
+          <li><a href="#law">Governing law</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ol>
+      </nav>
+
+      <section id="acceptance">
+        <h2>1. Acceptance</h2>
+        <p>
+          These terms apply to the Zorrent app for Android (package <code>com.najmiter.zorrent</code>) and to this
+          website. If you don’t agree, don’t install or use Zorrent. You must be old enough to form a binding contract
+          where you live, or have the permission of a parent or guardian.
+        </p>
+      </section>
+
+      <section id="service">
+        <h2>2. The app</h2>
+        <p>
+          Zorrent is a general-purpose BitTorrent client. It lets you add torrents and magnet links, download the files
+          they describe, and share pieces of them with other peers. Zorrent does not provide, host, index, recommend or
+          have any control over the content available on the BitTorrent network, and has no built-in search for
+          copyrighted material.
+        </p>
+        <p>
+          We may change, suspend or discontinue any part of the app at any time, including features, supported Android
+          versions and ad placements.
+        </p>
+      </section>
+
+      <section id="license">
+        <h2>3. License</h2>
+        <p>
+          We grant you a personal, non-exclusive, non-transferable, revocable license to install and use Zorrent on
+          Android devices you own or control, for lawful purposes and in line with these terms. All rights not granted
+          are reserved. The Zorrent name, logo and app design belong to us. Third-party components in the app remain under
+          their own licenses.
+        </p>
+        <p>You may not:</p>
+        <ul>
+          <li>copy, sell, rent, sublicense or redistribute the app, except where its licenses allow it;</li>
+          <li>reverse engineer or modify the app, except where the law gives you that right;</li>
+          <li>remove or interfere with the ads, or tamper with ad requests, impressions or clicks;</li>
+          <li>use the app in a way that harms the BitTorrent network, other users, or our or Google’s services.</li>
+        </ul>
+      </section>
+
+      <section id="responsibility">
+        <h2>4. Your responsibility</h2>
+        <p>
+          You alone are responsible for the torrents you add, the files you download and the data you upload to others.
+          You must make sure you have the legal right to download and share that content. Laws on copyright and file
+          sharing differ between countries, and it is your job to know and follow the ones that apply to you.
+        </p>
+        <p>
+          BitTorrent is peer-to-peer: your IP address is visible to the trackers and peers you connect to, and others can
+          download pieces of your files while a torrent is active. Zorrent does not hide your identity.
+        </p>
+      </section>
+
+      <section id="acceptable-use">
+        <h2>5. Acceptable use</h2>
+        <p>You agree not to use Zorrent to:</p>
+        <ul>
+          <li>download, share or distribute content that infringes someone else’s copyright or other rights;</li>
+          <li>download, share or distribute child sexual abuse material or any other content that is illegal to possess;</li>
+          <li>distribute malware, or attack or disrupt networks, trackers, peers or services;</li>
+          <li>break any law or regulation that applies to you.</li>
+        </ul>
+        <p>We may restrict or end your access to the app if you break these rules.</p>
+      </section>
+
+      <section id="copyright">
+        <h2>6. Copyright and takedowns</h2>
+        <p>
+          We respect intellectual property rights. Because Zorrent hosts no content, we can’t remove files from the
+          BitTorrent network. If you believe the app itself, or this website, infringes your rights, write to us at the
+          address below with a description of the work, where it appears, and your contact details, and we’ll look into
+          it.
+        </p>
+      </section>
+
+      <section id="ads">
+        <h2>7. Advertising</h2>
+        <p>
+          Zorrent is free and supported by ads served by Google AdMob. By using the app you accept that ads are shown.
+          How ad data is handled is described in the <a href="/privacy-policy/#ads">Privacy Policy</a>. We aren’t
+          responsible for the content of ads or for the websites and apps they link to.
+        </p>
+      </section>
+
+      <section id="third-parties">
+        <h2>8. Third parties</h2>
+        <p>
+          The app connects to trackers, peers and services that we don’t own or control, and may link to third-party
+          websites. We aren’t responsible for their content, availability, practices or policies. Your use of Google
+          Play and Google services is governed by Google’s own terms.
+        </p>
+      </section>
+
+      <section id="privacy">
+        <h2>9. Privacy</h2>
+        <p>
+          Our <a href="/privacy-policy/">Privacy Policy</a> explains what data the app handles. It forms part of these
+          terms.
+        </p>
+      </section>
+
+      <section id="warranty">
+        <h2>10. No warranty</h2>
+        <p>
+          Zorrent is provided “as is” and “as available”, without warranties of any kind, express or implied, including
+          merchantability, fitness for a particular purpose and non-infringement. We don’t promise that the app will be
+          uninterrupted, error-free or secure, that downloads will complete, or that downloaded files are safe, accurate
+          or legal. Files from the BitTorrent network may contain malware; scan what you download.
+        </p>
+      </section>
+
+      <section id="liability">
+        <h2>11. Limitation of liability</h2>
+        <p>
+          To the fullest extent the law allows, we aren’t liable for any indirect, incidental, special, consequential or
+          punitive damages, or for loss of data, profits or device function, arising from your use of Zorrent or the
+          content you download. Where liability can’t be excluded, our total liability is limited to the amount you paid
+          for the app, which is zero. Nothing in these terms limits liability that can’t be limited by law.
+        </p>
+      </section>
+
+      <section id="indemnity">
+        <h2>12. Indemnity</h2>
+        <p>
+          You agree to defend and hold us harmless from claims, damages and expenses, including reasonable legal fees,
+          arising from content you download or share with Zorrent, or from your breach of these terms or of the law.
+        </p>
+      </section>
+
+      <section id="termination">
+        <h2>13. Termination</h2>
+        <p>
+          You can stop using Zorrent at any time by uninstalling it. We may suspend or end your right to use the app if
+          you break these terms. Sections that by their nature should survive termination, including 4, 10, 11 and 12,
+          will do so.
+        </p>
+      </section>
+
+      <section id="changes">
+        <h2>14. Changes to these terms</h2>
+        <p>
+          We may update these terms. We’ll change the date at the top of this page and, for material changes, mention it
+          in the app or its release notes. Continuing to use Zorrent after a change means you accept the new terms.
+        </p>
+      </section>
+
+      <section id="law">
+        <h2>15. Governing law</h2>
+        <p>
+          These terms are governed by the laws of Pakistan, without regard to conflict-of-law rules. This doesn’t remove
+          any mandatory consumer rights you have in your country of residence.
+        </p>
+      </section>
+
+      <section id="contact">
+        <h2>16. Contact</h2>
+        <p>
+          Najam (najmiter)<br />
+          <a href="mailto:realnajmiter@gmail.com">realnajmiter@gmail.com</a>
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <div class="foot-inner">
+        <span>ZORRENT</span>
+        <span class="spacer"></span>
+        <a href="/">Home</a>
+        <a href="/privacy-policy/">Privacy</a>
+        <a href="/terms/">Terms</a>
+      </div>
+    </footer>
+  </body>
+</html>
