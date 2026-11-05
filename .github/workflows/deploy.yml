@@ -51,6 +51,15 @@ jobs:
             --use-short-doctype \
             -o dist/privacy-policy/index.html
 
+          mkdir -p dist/terms
+          npx -y html-minifier-terser@7 terms/index.html \
+            --collapse-whitespace \
+            --remove-comments \
+            --minify-css true \
+            --remove-redundant-attributes \
+            --use-short-doctype \
+            -o dist/terms/index.html
+
           cp robots.txt sitemap.xml dist/
           cp -r icons dist/
           echo "zorrent.knoctal.com" > dist/CNAME
